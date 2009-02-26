@@ -1,0 +1,12 @@
+diagnostic_dawson
+diagnostic_series
+diagnostic_window
+nashS
+lagtime
+count.diff.direction
+k_rel
+rmse
+data/example.peaks??
+
+toPrivate: diagnostic
+toDo: Check documentation for missing parts
