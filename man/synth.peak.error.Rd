@@ -21,7 +21,11 @@ rez.time = length.out - base.time - rise.time, err1.factor = c(1.2,
 8), err4.factor = c(9, 18, 27), err5.factor = c(0.1, 0.2, 0.4),
 err6.factor = c(1.5, 2, 3), 
 err9.factor = c(2, 3, 4.5))
-p.synth.peak.error(peaks, y.max = (max(peaks, na.rm = TRUE)))
+p.synth.peak.error(peaks, y.max = (max(peaks, na.rm = TRUE)),
+                 peak.cluster = NULL, peak.palette = grey(c(0, 0.6,
+                 0.8)), use.layout = TRUE, show.errors = 1:n.errors,
+                 peak.lty = rep(1, n.errors), mfrow = c(2,
+                 ceiling(length(show.errors)/2)))
 }
 \arguments{
   \item{base}{ level of the base flow component }
@@ -49,6 +53,17 @@ too wide/too narrow }
 during the recession phase }
   \item{peaks}{ object returned from synth.peak.error() }
   \item{y.max}{ upper limit for the y-axis }
+  \item{peak.cluster}{object returned from \code{\link{peaks.in.clusters}} used for
+coloring the cluster assignment of synthetic peaks (see examples)}
+  \item{peak.palette}{Colors to use if peak.cluster is NULL: first
+color for reference, second and third for peaks over- and
+underestimating the reference}
+  \item{use.layout}{Boolean, indicating whether to use the predefined
+layout}
+  \item{mfrow}{mfrow plot parameter (only used, if use.layout=FALSE)}
+  \item{show.errors}{Vector with indices indicating which errors to display}
+  \item{peak.lty}{Line types for either clusters as defined in
+peak.cluster or as in peak.palette}
 }
 \value{
    synth.peak returns a vector with the synthetic peak according to
@@ -76,6 +91,10 @@ peaks2 <- synth.peak.error(rise.factor=2, recession.const=0.02,
 
     p.synth.peak.error(peaks)
     p.synth.peak.error(peaks2)
+
+    data(tiger.example)
+    peak.cluster <- peaks.in.clusters(result=tiger.single,  solution=5, new.order=c(2,3,5,1,4))
+    p.synth.peak.error(peaks=tiger.single$synthetic.errors, peak.cluster=peak.cluster, peak.palette=rainbow(5))
 
 }
 \keyword{ utilities }

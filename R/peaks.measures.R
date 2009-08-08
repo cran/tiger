@@ -1,5 +1,5 @@
 peaks.measures <- function(result, show.measures=1:num.measures,
-synthetic.peaks.col = c(2:8,2:8),mfrow=c(2,3), do.out=rep(TRUE, length(show.measures)) ){
+synthetic.peaks.col = c(2:8,2:8),mfrow=c(2,3),col.best.match="black", do.out=rep(TRUE, length(show.measures)) ){
     n.level <- dim(result$measures.synthetic.peaks)[2]
     n.errors <- dim(result$measures.synthetic.peaks)[1]
     num.measures <- length(result$measures)
@@ -19,7 +19,7 @@ for(measure in show.measures){
         lab <- substitute(" "*a, list(a=lab))
         best <- result$best.value.location$all.values[measure]
         plot(1:n.level, seq(my.min(c(data,best), na.rm=TRUE, do.out=do.out[which(show.measures %in% measure)]), my.max(c(data,best), na.rm=TRUE, do.out=do.out[which(show.measures %in% measure)]), length.out=n.level), type="n", main=lab, xlab="", ylab=lab)
-        lines(c(0,n.level+1),c(best, best) , lwd=2, col="yellow")
+        lines(c(0,n.level+1),c(best, best) , lwd=2, col=col.best.match)
         for(error in 1:n.errors){
             points(data[error,], pch=error, col=synthetic.peaks.col[error])
         }

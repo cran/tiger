@@ -1,0 +1,11 @@
+useDynLib(tiger)
+
+export( 
+   box.plots, color.factor, correlated, count.diff.direction.error,
+diagnostic_dawson, diagnostic_series, diagnostic_window, eD,
+errors.in.time, k_hyd, k_rel, lagtime, LCS, nashS, nashS_HF,
+peaks.in.clusters, peaks.measures, peaks.on.som, p.synth.peak.error,
+p.validityIndex, scatterplot, synth.peak.error, synth.peak, tiger,
+tiger.peaks, validityIndex, change.order.clusters, to.uniform
+)
+

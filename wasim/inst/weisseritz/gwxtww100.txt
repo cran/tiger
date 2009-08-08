@@ -1,3 +1,0 @@
-YY	MM	DD	HH	"1"	"2"	tot_average
-Grundwasserabstrom/-entnahme in mm je Zone  soil_model
---	--	--	--	0.6693116	0.3306884	1.0000

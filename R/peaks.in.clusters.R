@@ -9,25 +9,29 @@ peaks.in.clusters <- function(result, solution, new.order=1:solution){
     cat("level &", paste(1:6, collapse="&"), "\\\\\n")
     cat("\\hline\n")
     for(error in 1:n.errors){
-       for(level in 1:n.level){
-            error.cluster.pos[error,level] <- LETTERS[
-              which.min(apply(cluster.rer$centers, 1, FUN=eD, 
-                              y= result$measures.uniform.synthetic.peaks[error,level,]))
-               ]
-       }
+       if(result$use.som){
+	       error.cluster.pos[error,] <-  cluster.rer$cluster[1+result$som.pos.errors[error,,1]+result$som.pos.errors[error,,2]*result$som.dim[1]]
+	       cat(result$error.names[error], "&", paste( LETTERS[error.cluster.pos[error,]]  , collapse="&"), "\\\\\n")
+       } else {
+	       for(level in 1:n.level){
+		    error.cluster.pos[error,level] <- 
+		      which.min(apply(cluster.rer$centers, 1, FUN=eD, 
+				      y= result$measures.uniform.synthetic.peaks[error,level,]))
+	       }
 
-       cat(result$error.names[error], "&", paste(error.cluster.pos[error,] , collapse="&"), "\\\\\n")
+	       cat(result$error.names[error], "&", paste(LETTERS[error.cluster.pos[error,]] , collapse="&"), "\\\\\n")
+       }
     }
 
     
     cat("\n\nCluster & Error & Level\\\\\n")
-    for(cluster in LETTERS[1:solution]){
+    for(cluster in 1:solution){
        cluster.printed=FALSE
        for(error in 1:n.errors){
           level <- which(error.cluster.pos[error,]==cluster)
           if(length(level)>0){
               if(!cluster.printed){
-                 cat(cluster)
+                 cat(LETTERS[cluster])
                  cluster.printed=TRUE
               }
               cat(sep="", " & ", result$error.names[error],  " & ",
@@ -36,4 +40,5 @@ peaks.in.clusters <- function(result, solution, new.order=1:solution){
        }
     }
 
+   return(error.cluster.pos)
 }

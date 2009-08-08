@@ -15,32 +15,53 @@ ERrors)}
 \maketitle
 \section{Introduction}
 This document walks you step by step through the data analysis with
-the tiger package. For more information on the method, please see
-the relevant publication by \citet{Reusser2008a}.
-In fact, the example presented here will reproduce the Weisseritz case
-study from \citep{Reusser2008a}.
+the TIGER package. The core idea of the method is to gain important
+information about a model by a temporally resolved  evaluation of the
+difference between model and observation. If similar patterns of this
+difference occur repeatedly, the same
+discrepancy between model and observation indicates that the
+difference is due to
+a structural problem in the model or a systematic errors in
+the observation. We may improve our understanding of the system under
+investigation, if the conditions leading to this pattern of
+difference can be identified.   
+ For more information on the method, please see
+ \citep{Reusser2009a, Reusser2009}.
 
 \section{Data}
 In this example, we are looking at the difference between an observed
 river discharge time series and the model output from a hydrological
-model, simulating the river discharge from meteorolgical input data.
+model, simulating the river discharge from meteorological input data.
 The data is provided in the package and is shown in
-figure~\ref{fig:data}.
+figure~\ref{fig:data} in two ways, once as a single best simulation
+run and once as a number (25) of simulation runs with varying model parameters
+representing the uncertainty in the estimation of those parameters.
 
 <<>>=
 library(tiger)
 data(tiger.example)
-measured <- tiger.res$measured
-modelled <- tiger.res$modelled
+measured.single <- tiger.single$measured
+modelled.single <- tiger.single$modelled
+
+measured.multi <- tiger.multi$measured
+modelled.multi <- tiger.multi$modelled
 @
 
 
 <<label=fig1plot,include=FALSE>>=
 
-plot(d.dates, measured, type="l", col="blue")
-lines(d.dates, modelled)
+par(mfrow=c(2,1))
+plot(d.dates, measured.single, type="l", col="blue")
+lines(d.dates, modelled.single)
 
 legend("topright", legend=c("measured","modelled"), lty=1, col=c("blue", "black"))
+
+plot(d.dates, measured.multi, type="l", col="blue")
+for(i in 1:NROW(modelled.multi)){
+	lines(d.dates, modelled.multi[i,])
+}
+
+lines(d.dates, measured.multi, col="blue")
 @
 
 \begin{figure}
@@ -91,14 +112,23 @@ The command bellow plots the synthetic peak errors.
 \end{figure}
 
 Then, we will call the function that does all the computation. The
-object returned (\verb@result@) is equivalent to \verb@tiger.res@
-provided in \verb@data(tiger.example)@. This result object will then
-be further processed by plotting and summarizing methods.
+objects returned (\verb@result.single@ and \verb@result.multi@) are 
+equivalent to
+\verb@tiger.single@ and \verb@tiger.multi@
+provided in \verb@data(tiger.example)@. For the multi-run case we
+calculate values for every tenth window only (\verb@step.size=10@) in
+order to save memory and computation time. Note that
+\citet{Reusser2009a} used \verb@step.size=1@ for their study. These result objects will then
+be further processed by plotting and summarizing methods. Here, the
+methods are shown for the \verb@tiger.multi@ object, but they work the
+same way for the  \verb@tiger.single@ object.
 <<eval=FALSE>>=
-result <- tiger(modelled=d.qgko.calib, measured=d.ammelsdorf_interp, window.size=240, synthetic.errors=peaks2)
+result.single <- tiger(modelled=modelled.single, measured=measured.single, window.size=240, synthetic.errors=peaks2)
+result.multi <- tiger(modelled=modelled.multi, measured=measured.multi, window.size=240, synthetic.errors=peaks2)
 @
 <<echo=FALSE>>=
-result <- tiger.res
+result.single <- tiger.single
+result.multi <- tiger.multi
 @
 
 \section{Assessing performance measures used to build error groups}
@@ -112,8 +142,8 @@ interdependence (Figure~\ref{fig:scatter} - here, we are only showing
 the scatter plots for the first five measures).
 
 <<label=fig3plot,include=FALSE>>=
- correlated <- correlated(result, keep=c("CE","RMSE" ))
- print(scatterplot(result$measures.uniform, 
+ correlated <- correlated(result.multi, keep=c("CE","RMSE" ))
+ print(scatterplot(result.multi$measures.uniform, 
             show.measures=correlated$measures.uniform$to.keep[c(1,2,3,5,6)]))
 @
 
@@ -136,11 +166,11 @@ side. The variable \verb@do.out@ determines whether to exclude outliers from
 the plot.
 
 <<label=fig4plot,include=FALSE>>=
-show.measures <- which(names(result$measures) %in% 
+show.measures <- which(names(result.multi$measures) %in% 
                        c("CE", "PDIFF", "ME", "MSDE", 
                          "SMSE",  "Rsqr","SMALE",
                          "lagtime", "NSC"))
-peaks.measures(result, show.measures=show.measures,
+peaks.measures(result.multi, show.measures=show.measures,
                mfrow=c(2,5), do.out=c(rep(FALSE, 4), TRUE,
                                       TRUE,rep(FALSE, 3)) )
 @
@@ -162,17 +192,11 @@ c-means clustering, we try to minimize the validity index
 
 
 <<label=fig5plot,include=FALSE>>=
-validity.max <- 10
 par(mar=c(4,4,1,1)+0.1)
-xmax <- 1
-while(any(result$validity[xmax:length(result$validity)]<validity.max)){
-        xmax <- xmax+1
-        }
-plot(result$validity[1:xmax], ylab=expression(V[XB]), xlab="Number of clusters", type="b", lty=2, ylim=c(0,validity.max))
+p.validityIndex(result.multi, validity.max=10)
 
 @
 
-The while loop determines the maximum number to plot on the x-axis.
 
 \begin{figure}
 \begin{center}
@@ -185,23 +209,22 @@ for c-means clustering.}
 \label{fig:validity}
 \end{figure}
 
-The 2
-cluster solution combines clusters A-C and D-F from the 6 cluster
-solution, while the 5 cluster solutions combines clusters B and D from
-the 6 cluster solution (figure~\ref{fig:numberClusters}).
-Therefore the 6 cluster solution also represents the 2
-and 3 cluster solutions. In this example, we are using the 6
+The 3
+cluster solution combines clusters B and C  from the 5 cluster
+solution in cluster B and clusters E and E in cluster C
+ (figure~\ref{fig:numberClusters}).
+Therefore the 5 cluster solution also represents the 
+3 cluster solution. In this example, we are using the 5
 group (cluster) solution. 
 
 <<label=fig5aplot,include=FALSE>>=
-par(mfrow=c(3,1),mar=c(2,4,1,2)+0.1)
-errors.in.time(d.dates, result, solution=2,
-               show.months=TRUE)
-errors.in.time(d.dates, result, solution=5,
-               show.months=TRUE, new.order=c(3,4,5,2,1))
-errors.in.time(d.dates, result, solution=6,
-               show.months=TRUE, new.order=c(4,6,5,2,1,3))
-solutions <- 6
+par(mfrow=c(2,1),mar=c(2,4,1,2)+0.1)
+errors.in.time(d.dates, result.multi, solution=3)
+               #show.months=TRUE)
+errors.in.time(d.dates, result.multi, solution=5,
+                new.order=c(4,3,5,2,1))
+               #show.months=TRUE, new.order=c(3,4,5,2,1))
+solutions <- 5
 @
 \begin{figure}
 \begin{center}
@@ -210,23 +233,23 @@ solutions <- 6
 @
 \end{center}
 \caption{Simulated and observed discharge series. The colour bars indicate
-the error class during this time period. Plots are show for 2, 5, and
-6 classes.}
+the error class during this time period. Plots are show for 3, and
+5 classes.}
 \label{fig:numberClusters}
 \end{figure}
 
 
 \section{Time pattern of error groups}
 The temporal occurence of the error groups is shown in
-figure~\ref{fig:errorsInTime}. The new.order parameter helps to
-reassign the color pattern, such that it is equivalent to the figures
-in \citep{Reusser2008a}.
+figure~\ref{fig:errorsInTime}. 
 
 <<label=fig6plot,include=FALSE>>=
-new.order <- c(4,6,5,2,1,3)
+#new.order <- c(4,5,2,1,3)
+new.order=c(4,3,5,2,1)
 par(mar=c(2,4,1,2)+0.1)
-errors.in.time(d.dates, result, solution=solutions,
-               show.months=TRUE, new.order=new.order)
+errors.in.time(d.dates, result.multi, solution=solutions,
+               #show.months=TRUE, new.order=new.order)
+               new.order=new.order)
 @
 
 \begin{figure}
@@ -242,21 +265,41 @@ the error class during this time period.}
 
 \section{Characterizing the error groups}
 In order to characterize the error groups, we can check which of the
-synthetic peaks belong to which error groups. Note that the output is
+synthetic peaks belong to which error groups and visualize the
+assignment as shown in Figure~\ref{fig7}. Note that the output is
 formated as \LaTeX tables with \& as the delimiter between columns and
-\\\\ as end of line delimiter.
+$\backslash\backslash$ as end of line delimiter.
 <<>>=
-peaks.in.clusters(result, solution=solutions, new.order=new.order)
+peak.cluster <- peaks.in.clusters(result.multi, solution=solutions, new.order=new.order)
 @
+
+<<label=fig7plot,include=FALSE>>=
+p.synth.peak.error(peaks2, peak.cluster=peak.cluster,
+peak.palette=rainbow(5) )
+@
+
+\begin{figure}
+\begin{center}
+<<label=fig7,fig=TRUE,echo=FALSE>>=
+<<fig7plot>>
+@
+\end{center}
+\caption{Synthetic peak errors with colors showing the corresponding
+cluster.}
+\label{fig:fig7}
+\end{figure}
 
 But also, we can check what the values of the performance measures in
 each cluster are. This is done with box plots as shown in
 figure~\ref{fig:boxPlots}. The plotting command also produces a
-summary table of the findings as described by \citet{Reusser2008a}.
+summary table of the findings as described by \citet{Reusser2009a}.
 
-<<label=fig7plot,include=FALSE>>=
+<<label=fig8plot,include=FALSE>>=
 par(mfrow=c(4,6), mar=c(2,2,3,1)+0.1)
-summary.table <- box.plots(result, solution=solutions, show.measures=correlated$measures.uniform$to.keep, new.order=new.order)
+summary.table <- box.plots(result.multi, 
+                           solution=solutions,
+                           show.measures=correlated$measures.uniform$to.keep,
+                           new.order=new.order)
 @
 <<>>=
 print(summary.table)
@@ -264,8 +307,8 @@ print(summary.table)
 
 \begin{figure}
 \begin{center}
-<<label=fig7,fig=TRUE,echo=FALSE>>=
-<<fig7plot>>
+<<label=fig8,fig=TRUE,echo=FALSE>>=
+<<fig8plot>>
 @
 \end{center}
 \caption{Matrix of box plots comparing the normalized

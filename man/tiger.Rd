@@ -11,7 +11,10 @@ to each cluster. Additionally, synthetic peaks are used to better
 characterize the clusters.
 }
 \usage{
-tiger(modelled, measured, window.size,  maxc = 15, synthetic.errors=NA)
+tiger(modelled, measured, window.size, step.size = 1,
+                 use.som = TRUE, som.dim = c(20, 20), som.init =
+                 "sample", som.topol = "hexa", maxc = 15,
+                 synthetic.errors = NA)
 tiger.peaks(result, synthetic.errors)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,6 +25,14 @@ tiger.peaks(result, synthetic.errors)
   \item{maxc}{ Maximum number of clusters to be tested }
   \item{synthetic.errors}{ Matrix returned from \code{\link{synth.peak.error}}  }
   \item{result}{ object returned from tiger}
+  \item{use.som}{boolean, indicating whether to use SOM before
+	applying fuzzy clustering}
+  \item{som.dim}{ Dimension of the Self Organizing Map (SOM) c(x,y) }
+  \item{som.init}{ Method to initialize the SOM }
+  \item{som.topol}{ Topology of the SOM }
+  \item{step.size}{ Size of the steps defining the number of scores to
+be calculating along the time series. For example, with a value of 5
+every fifth value is included }
 }
 \details{
    See the package vignette.
@@ -49,11 +60,11 @@ error" for each performance measure is}
 \seealso{ The package vignette}
 \examples{
 data(tiger.example)
-modelled <- tiger.res$modelled
-measured <- tiger.res$measured
+modelled <- tiger.single$modelled
+measured <- tiger.single$measured
 peaks <- synth.peak.error(rise.factor=2, recession.const=0.02, rise.factor2=1.5)
-result2 <- tiger(modelled=modelled[1000:3000], measured=measured[1000:3000], window.size=240, synthetic.errors=peaks)
-errors.in.time(d.dates[1000:3000], result2, solution=6, show.months=TRUE)
+\dontrun{result2 <- tiger(modelled=modelled, measured=measured, window.size=240, synthetic.errors=peaks)
+errors.in.time(d.dates, result2, solution=6, show.months=TRUE)}
 
 peaks2 <- synth.peak.error(rise.factor=2, recession.const=0.02,
      rise.factor2=1.5, err1.factor=c(1.3,1.5,2.0),
@@ -65,11 +76,12 @@ peaks2 <- synth.peak.error(rise.factor=2, recession.const=0.02,
      err9.factor=c(1.5,3,6)
    )
 
-result3 <- tiger.peaks(result2, peaks2)
+\dontrun{result3 <- tiger.peaks(result2, peaks2)
 
    peaks.in.clusters(result2, solution=6)
    x11()
    peaks.in.clusters(result3, solution=6)
+}
 
 }
 \keyword{ utilities }

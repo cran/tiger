@@ -32,7 +32,14 @@ tiger.peaks <- function(result, synthetic.errors){
     diag.names.red <- diag.names[!diag.names %in% c("AIC","BIC","span")]
 
     #Error quantile for synthetic peaks according to time series data
-    t.diff <-  result$measured- result$modelled
+    if(result$multi.model){
+         modelled <- drop.dimension(x=result$modelled)
+         measured <- rep(result$measured, result$count.model)
+    } else {
+         modelled <- result$modelled
+         measured <- result$measured
+    }
+    t.diff <-  measured- modelled
     diff.ecdf <- ecdf(t.diff)
 
     for(i in 1:n.errors) {
@@ -55,6 +62,9 @@ tiger.peaks <- function(result, synthetic.errors){
 
     result$measures.uniform.synthetic.peaks <- synth_diag.rer
 
+    if(result$use.som){
+        result <- tiger.som.peaks(result)
+    }
     result$error.names <- paste(c("peak size", "shift", "recession", "lag",
 "size./integr", "width", "false peak", "undeteced peak", "shift w/o peak"), " (",1:9,")", sep="")
 

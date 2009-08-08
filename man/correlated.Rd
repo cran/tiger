@@ -34,6 +34,6 @@ from a result from \code{\link{tiger}}.
 \seealso{ This method helps to reduce the amount of data to be analyzed from an evaluation using \code{\link{tiger}}}
 \examples{
 data(tiger.example)
-correlated <- correlated(tiger.res, keep=c("CE","RMSE" ))
+correlated <- correlated(tiger.single, keep=c("CE","RMSE" ))
 }
 \keyword{ utilities }

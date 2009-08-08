@@ -1,9 +1,10 @@
 \name{tiger.res}
 \alias{tiger.example}
-\alias{tiger.res}
+\alias{tiger.single}
+\alias{tiger.multi}
 \alias{d.dates}
 \docType{data}
-\title{ Example data for tempperform package}
+\title{ Example data for TIGER package}
 \description{
 Example data for tempperform package 
 }
@@ -16,6 +17,6 @@ Reusser, D. E., Blume, T., Schaefli, B., and Zehe, E.: Analysing the temporal dy
 }
 \examples{
 data(tiger.example)
-errors.in.time(d.dates, tiger.res, solution=6, show.months=TRUE)
+errors.in.time(d.dates, tiger.multi, solution=6, show.months=TRUE)
 }
 \keyword{datasets}

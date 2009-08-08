@@ -5,6 +5,10 @@ eD<-function(x,y){
    #columns the n coordinates in the n-space
    #str(x) ==  matrix [1:k, 1:n]
    
-   return(sqrt(sum((x-y)^2)))
+   square <- (x-y)^2
+   if(is.null(dim(square))){
+        dim(square) <- c(1, length(square))
+   }
+   return(sqrt(rowSums(square)))
 }
 

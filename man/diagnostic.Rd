@@ -29,15 +29,18 @@
     of the residuals.
 }
 \usage{
-diagnostic_window(position, duration, measured, modelled, use_qualV = FALSE, diff.ecdf=NA)
-diagnostic_series(measured, modelled, duration, integral_correction = FALSE, use_qualV = FALSE)
+diagnostic_window(position, window.size, measured, modelled, use_qualV = FALSE, diff.ecdf=NA)
+diagnostic_series(measured, modelled, window.size, step.size = 1, integral_correction = FALSE, use_qualV = FALSE)
 diagnostic_dawson(modelled, measured, p=NA, m=NA, additional=TRUE, use_qualV=FALSE, diff.ecdf=NA )
 }
 \arguments{
   \item{modelled}{ Modelled time series or array with dimension \code{c(number_series, dim(measured))}}
   \item{measured}{ Measured time series }
   \item{position}{ Index from where to start the calculation }
-  \item{duration}{ Number of elements to include }
+  \item{window.size}{ Number of time steps to include }
+  \item{step.size}{ Size of the steps defining the number of scores to
+be calculating along the time series. For example, with a value of 5
+every fifth value is included }
   \item{integral_correction}{ Boolean. If true, the ratio of the
   integrals is divided by the total ratio of the entire integral. This
   way, relative integral errors can be detected.}
@@ -72,10 +75,10 @@ Jachner, S.; van den Boogaart, K. G. & Petzoldt, T. Statistical Methods for the 
    diagnostic_dawson(measured = reference.peak, modelled = example.peaks[1,])
 
    #first half only
-   diagnostic_window(measured=reference.peak, modelled=example.peaks[1,], position = 1, duration = 45 )
+   diagnostic_window(measured=reference.peak, modelled=example.peaks[1,], position = 1, window.size = 45 )
    
-   #gliding window for 10 time steps
-   diagnostic_series(measured=reference.peak, modelled=example.peaks[1,], duration = 10 )
+   #gliding window for 20 time steps
+   diagnostic_series(measured=reference.peak, modelled=example.peaks[1,], window.size = 20 )
 
 }
 \keyword{ utilities }

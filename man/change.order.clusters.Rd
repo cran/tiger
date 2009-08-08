@@ -25,8 +25,8 @@ data(tiger.example)
 
 new.order <- c(6,3,2,5,4,1)
 
-cmeans.result <- tiger.res$cluster.assignment[[6]]
+cmeans.result <- tiger.single$cluster.assignment[[6]]
 str(cmeans.result)
-cmeans.result2 <-change.order.clusters(cmeans.result, new.order)
+cmeans.result2 <- change.order.clusters(cmeans.result, new.order)
 }
 \keyword{ utilities }

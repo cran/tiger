@@ -11,7 +11,7 @@ synth.peak <- function(base=0.07,base.time=6, rise.time=5, rise.factor, recessio
           rise.start <- 1
       }
    } else {
-      ser.base <- rep(base,base.time)
+      ser.base <- rep(base,ceiling(base.time))
       rise.start <- 1
    }
    if(rise.start > rise.time){
@@ -24,6 +24,7 @@ synth.peak <- function(base=0.07,base.time=6, rise.time=5, rise.factor, recessio
       ser.rez <- ser.rez[-(1:(rez.time-length.out))]
    }
    ans <- c(ser.base,ser.rise,ser.rez)
+   stopifnot(length(ans)==ceiling(length.out)) 
    return(ans)
 }
 

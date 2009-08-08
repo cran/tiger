@@ -1,45 +1,66 @@
-errors.in.time <- function(xval, result, solution, show.months=FALSE, new.order=1:solution){
-    regions<-change.order.clusters(result$cluster.assignment[[solution]], new.order )$cluster
+errors.in.time <- function(xval, result, solution, show.months=FALSE,
+new.order=1:solution, x.range=1:length(xval),
+pmax=max(c(result$measured, result$modelled), na.rm=TRUE),
+data.colors=data.frame(measured=c("grey"), modelled=c("black"), rain=c("black")),
+clusterPalette= rainbow(solution),
+color.cut.off=0, frac.max=0.7, frac.min=0.4,
+legend.pos="topleft", ...
+ ){
 
-    xval.red <- xval[!result$na.rows]
-    stopifnot(length(regions)==length(xval.red))
 
-    pmax<-max(result$modelled, na.rm=TRUE)
-    pmin<-0.4*pmax
-    pmax<-0.7*pmax
+    pmax.orig <- pmax
+    pmin<-frac.min*pmax
+    pmax<-frac.max*pmax
     pdist <- (pmax-pmin)/solution
-    palette( rainbow(solution))
+    old.pal <- palette(clusterPalette)
 
-    plot(xval, result$model, ylab="discharge/mm/h", type="n")
+    plot(range(xval[x.range]), range(0,pmax.orig), ylab="discharge/mm/h", type="n", ...)
 
     if(show.months){
-        month.ticks <-seq(min(xval),max(xval),by="month") 
+        min.month <- strftime(min(as.POSIXlt(xval[x.range])), "%m.%y")
+        my.min <- strptime(paste(1,min.month,sep="."), "%d.%m.%y")
+        max.month <- strftime(max(as.POSIXlt(xval[x.range])), "%m.%y")
+        my.max <- strptime(paste(1,max.month,sep="."), "%d.%m.%y")
+        month.ticks <-seq(my.min,my.max,by="month") 
         month.lab <- strftime(as.POSIXlt(month.ticks), "%b")
-        month.lab[month.lab==1] <- NA
+        month.lab[strftime(as.POSIXlt(month.ticks), "%m")=="01"] <- NA
         axis(1, at=month.ticks, label=month.lab, cex.axis=0.4, tcl=-0.15, mgp=c(3,0.2,0))
     }
 
-    lines(xval, result$model, type="l", lwd=2)
-    lines(xval, result$measured, type="l", lwd=1.5, col="grey")
-    for(the.region in unique(regions)){
-       subsel <- regions==the.region
-       subsel[ is.na(subsel)] <- FALSE
-       if(sum(subsel)==0) next
-       min.diff <- min(diff(xval.red))
-       myTo <- c(which(diff(xval.red[subsel])>1.2*min.diff), length(xval.red[subsel]))
-       myFrom <- c(1, which(diff(xval.red[subsel])>1.2*min.diff) +1)
-       #i<-1
-       #xval[sel][subsel][myFrom][i]; xval[sel][subsel][myTo][i]+3600
-       #xval[sel][subsel]
+    
+    if(result$multi.model){
+        for(i in 1:result$count.model){
+            reduced.lines(xval[x.range], result$model[i,x.range], type="l", lwd=2, col=as.character(data.colors$modelled))
+        }
+    } else {
+        reduced.lines(xval[x.range], result$model[x.range], type="l", lwd=2, col=as.character(data.colors$modelled))
+    }
+    reduced.lines(xval[x.range], result$measured[x.range], type="l", lwd=1.5, col=as.character(data.colors$measured))
+
+    region.proportion <- cluster.proportion(result=result, solution=solution, new.order=new.order)
+    #redefine x.range according to step size
+    x.range <- seq(min(x.range), max(x.range), by=result$step.size)
+    stopifnot(length(x.range)==dim(region.proportion)[2])
+    min.diff <- min(diff(xval[x.range]))
+    try(units(min.diff) <- "secs", silent=TRUE)
+    min.diff <- as.numeric(min.diff)
+    myFrom <- xval - min.diff/2
+    myTo <- xval + min.diff/2
+
+    for(the.region in 1:solution){
        currmin <- pmax-(the.region-1)*pdist
        currmax <- pmax-the.region*pdist
-       #tw <- xval[result$window.size+1] - xval[1]
-       rect(xval.red[subsel][myFrom],currmin, xval.red[subsel][myTo], currmax, col=the.region , border="transparent")
+       cols <- color.factor(color=palette()[the.region],
+                            value= region.proportion[the.region,],
+                            max=1)
+       cols[region.proportion[the.region,]<=color.cut.off] <- NA
+       rect(myFrom[x.range],currmin, myTo[x.range], currmax, col=cols, border="transparent")
 
        #lines(xval[sel][subsel], result$measured[sel][subsel], type="l", col=the.region)
     }
-    legend("topleft", inset=0.05, lty=c(1,1), lwd=c(2,1.5),col=c("black","grey"),  legend=c("simulated", "observed"))
-    axis(side=4, at= seq((pmax-pdist/2), pmin+pdist/2, length.out = max(regions)), labels=LETTERS[1:(max(regions))], mgp=c(3,0.7,0), las=2, cex.axis=0.6 )
+    legend(legend.pos, inset=0.05, lty=c(1,1), lwd=c(2,1.5),col=c("black","grey"),  legend=c("simulated", "observed"))
+    axis(side=4, at= seq((pmax-pdist/2), pmin+pdist/2, length.out = solution), labels=LETTERS[1:solution], mgp=c(3,0.7,0), las=2, cex.axis=0.6 )
 
+     palette( old.pal )
 
 }

@@ -28,9 +28,5 @@ once:
 \examples{
 eD(1:3, 2:4)
 
-## The function is currently defined as
-function(x,y){
-   return(sqrt(sum((x-y)^2)))
-  }
 }
 \keyword{ utilities }

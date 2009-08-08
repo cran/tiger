@@ -36,10 +36,10 @@ Maintainer: Dominik Reusser <dreusser@uni-potsdam.de>
 \keyword{ package }
 \examples{
 data(tiger.example)
-modelled <- tiger.res$modelled
-measured <- tiger.res$measured
+modelled <- tiger.single$modelled
+measured <- tiger.single$measured
 peaks <- synth.peak.error(rise.factor=2, recession.const=0.02, rise.factor2=1.5)
-result2 <- tiger(modelled=modelled[1000:3000], measured=measured[1000:3000], window.size=240, synthetic.errors=peaks)
-errors.in.time(d.dates[1000:3000], result2, solution=6, show.months=TRUE)
+\dontrun{result2 <- tiger(modelled=modelled, measured=measured, window.size=240, synthetic.errors=peaks)
+errors.in.time(d.dates, result2, solution=6, show.months=TRUE)}
 
 }

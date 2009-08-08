@@ -1,7 +1,8 @@
 box.plots <- function(result, solution, show.measures =
 1:num.measures, new.order=1:solution, show.synthetic.peaks=FALSE, 
-synthetic.peaks.col = c(2:8,3), show.timestep=NA, ref=NULL,
-ref.new.order=new.order, ref.solutions=solution
+synthetic.peaks.col = c(2:8,2:8), show.timestep=NA, show.cell=NA,  ref=NULL,
+ref.new.order=new.order, ref.solutions=solution,
+col.best.match="black", clusterPalette=rainbow(solution)
 ){
 
     num.measures <- length(result$names)
@@ -27,17 +28,31 @@ ref.new.order=new.order, ref.solutions=solution
     for(i in show.measures){
         main.expr <- substitute(expression(' '*b),list(b=result$names[[i]]))
         if(do.ref){
-            bp <- boxplot(ref$measures.uniform[!ref$na.rows,i] ~ cluster.rer.ref$cluster, col="lightgray", xlab="region", main=eval(main.expr), names=LETTERS[1:ref.solutions], ylim=c(0,1))
+            if(result$use.som){
+                data <- ref$som$code[,i] 
+            } else {
+                data <- ref$measures.uniform[!ref$na.rows,i]
+            }
+            bp <- boxplot(data ~ cluster.rer.ref$cluster, col="lightgray", xlab="", main=eval(main.expr), names=LETTERS[1:ref.solutions], ylim=c(0,1))
         }
-        bp <- boxplot(result$measures.uniform[!result$na.rows,i] ~ cluster.rer$cluster, col=rainbow(solution), xlab="region", main=eval(main.expr), names=LETTERS[1:solution], ylim=c(0,1), add=do.ref , boxwex=0.6 )
+        if(result$use.som){
+            data <- result$som$code[,i] 
+        } else {
+            data <- result$measures.uniform[!ref$na.rows,i]
+        }
+        bp <- boxplot(data ~ cluster.rer$cluster, col=clusterPalette, xlab="", main=eval(main.expr), names=LETTERS[1:solution], ylim=c(0,1), add=do.ref , boxwex=0.6 )
         bp.medians[i,]<-bp$stats[3,]
-        lines(c(0,solution+1), c(centers.box[i],centers.box[i]), lwd=2, col="yellow")
+        lines(c(0,solution+1), c(centers.box[i],centers.box[i]), lwd=2, col=col.best.match)
         if(show.synthetic.peaks){
             plot.window(c(0,7),c(0,1))
             data <- result$measures.uniform.synthetic.peaks[,,i]
             for(error in 1:n.errors){
                 points(data[error,], pch=error, col=synthetic.peaks.col[error])
             }
+        }
+        if(!any(is.na(show.cell))){
+             l.dat <- result$som$code[1+show.cell$x+show.cell$y * result$som.dim[1],i]
+             lines(c(0,solution+1), c(l.dat,l.dat), lwd=2, col="blue")
         }
         if(!is.na(show.timestep)){
              l.dat <- result$measures.uniform[show.timestep,i]
