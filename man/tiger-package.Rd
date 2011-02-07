@@ -14,14 +14,6 @@ characterize the clusters. The package provides functions to calculate
 and visualize these results.
 }
 \details{
-\tabular{ll}{
-Package: \tab tiger\cr
-Type: \tab Package\cr
-Version: \tab 0.1\cr
-Date: \tab 2009-02-25\cr
-License: \tab GPL-2\cr
-LazyLoad: \tab yes\cr
-}
 
 Use tiger to perform the calculations. See the package
 vignette for an example, how to perform calculations and how to

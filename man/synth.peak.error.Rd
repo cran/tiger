@@ -25,7 +25,8 @@ p.synth.peak.error(peaks, y.max = (max(peaks, na.rm = TRUE)),
                  peak.cluster = NULL, peak.palette = grey(c(0, 0.6,
                  0.8)), use.layout = TRUE, show.errors = 1:n.errors,
                  peak.lty = rep(1, n.errors), mfrow = c(2,
-                 ceiling(length(show.errors)/2)))
+                 ceiling(length(show.errors)/2)), plot.legend = TRUE,
+                 print.error.nr = TRUE)
 }
 \arguments{
   \item{base}{ level of the base flow component }
@@ -60,6 +61,8 @@ color for reference, second and third for peaks over- and
 underestimating the reference}
   \item{use.layout}{Boolean, indicating whether to use the predefined
 layout}
+  \item{plot.legend}{Boolean, indicating whether to show the legend}
+  \item{print.error.nr}{Boolean, indicating whether to label each subplot with a number}
   \item{mfrow}{mfrow plot parameter (only used, if use.layout=FALSE)}
   \item{show.errors}{Vector with indices indicating which errors to display}
   \item{peak.lty}{Line types for either clusters as defined in

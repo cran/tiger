@@ -17,6 +17,7 @@ synthetic.errors=NA
 
     if(length(dim(modelled))>=2){
          answer$multi.model <- TRUE
+	 stopifnot(dim(modelled)[1] > 1)
          answer$count.model <- dim(modelled)[1]
          answer$time.steps <- dim(modelled)[2]
     } else {

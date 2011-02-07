@@ -13,6 +13,9 @@ k_hyd(x)
 \value{
 Vector of recession constants.
 }
+\details{
+ The function returns \code{-dx/dt*1/x} if \code{dx/dt} is larger than 0 and x is not 0. For the other cases, NA is returned.
+}
 \references{ Blume Recession Paper }
 \author{ Dominik Reusser}
 \seealso{  \code{\link{diagnostic_dawson}} }

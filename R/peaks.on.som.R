@@ -3,7 +3,7 @@ clusterPalette=rainbow(solution), cell.size = 0.9, mfrow=c(2,ceiling(n.errors/2)
     
     halfsize <- cell.size/2
     cords<-result$som$code.sum[,1:2]+1
-    palette(colors)
+    palette(clusterPalette)
 
     n.errors <- dim(result$measures.synthetic.peaks)[1]
     cluster.rer <- change.order.clusters(result$cluster.assignment[[solution]], new.order)

@@ -1,7 +1,7 @@
 p.synth.peak.error <- function(peaks, y.max=(max(peaks,na.rm=TRUE)),
 peak.cluster = NULL, peak.palette=grey(c(0,0.6,0.8)), use.layout=TRUE,
 show.errors=1:n.errors, peak.lty=rep(1,n.errors),
-mfrow=c(2, ceiling(length(show.errors)/2))){
+mfrow=c(2, ceiling(length(show.errors)/2)), plot.legend=TRUE, print.error.nr=TRUE){
     n.errors=dim(peaks)[2]
     n.levels=dim(peaks)[3]
     old.pal <- palette(peak.palette)
@@ -43,7 +43,9 @@ mfrow=c(2, ceiling(length(show.errors)/2))){
            y.axt = "s"
         }
        plot(peaks[2,error,1,],type="n", xlab=xlab,ylab=ylab, xaxt=x.axt, yaxt=y.axt, ylim=c(0,y.max))
-       text(x=150, y=0.8*y.max, error, cex=2)
+       if(print.error.nr){
+	       text(x=150, y=0.8*y.max, error, cex=2)
+       }
        for(level in 1:n.levels){
            if(is.null(peak.cluster)){
                 peak.col <- ((level-1)%/%3)+2
@@ -59,6 +61,11 @@ mfrow=c(2, ceiling(length(show.errors)/2))){
     if(use.outer){
         mtext(outer=TRUE, side=2, line=-1, text="specific discharge/mm/h")
         mtext(outer=TRUE, side=1, line=-1, text="time/h")
+    }
+
+    if(!is.null(peak.cluster) & plot.legend){
+	    plot.new()
+            legend("left", legend=c("reference", paste("Cluster", LETTERS[1:max(peak.cluster)])), lty=c(1,peak.lty), col=c("black", peak.palette))
     }
     
     palette(old.pal)

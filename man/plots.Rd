@@ -18,14 +18,16 @@ box.plots(result, solution, show.measures = 1:num.measures,
                  ref = NULL, ref.new.order = new.order, ref.solutions =
                  solution, col.best.match = "black",
                  clusterPalette = rainbow(solution))
-errors.in.time(xval, result, solution, show.months = FALSE, new.order
-                 = 1:solution, x.range = 1:length(xval), pmax =
-                 max(c(result$measured, result$modelled), na.rm =
-                 TRUE), data.colors = data.frame(measured = c("grey"),
-                 modelled = c("black"), rain = c("black")),
-                 clusterPalette = rainbow(solution), color.cut.off = 0,
-                 frac.max = 0.7, frac.min = 0.4, legend.pos =
-                 "topleft", ...)
+errors.in.time(xval, result, solution, rain.data = NULL, show.months
+                 = FALSE, new.order = 1:solution, x.range =
+                 1:length(xval), pmax = max(c(result$measured,
+                 result$modelled), na.rm = TRUE), data.colors =
+                 data.frame(measured = c("grey"), modelled =
+                 c("black"), rain = c("black")), clusterPalette =
+                 rainbow(solution), color.cut.off = 0, frac.max = 0.7,
+                 frac.min = 0.4, grid.nx = 0, legend.pos = "topleft",
+                 show.data = TRUE, show.errors = TRUE, show.data.model
+                 = show.data, show.data.measured = show.data, ...)
 peaks.in.clusters(result, solution,  new.order = 1:solution)
 peaks.on.som(result, solution, clusterPalette=rainbow(solution), cell.size = 0.9, mfrow=c(2,ceiling(n.errors/2)), new.order=1:solution)
 peaks.measures(result, show.measures = 1:num.measures,
@@ -66,6 +68,12 @@ the values for the performance measures are to be plotted as black lines in the 
   \item{validity.max}{Do not plot solutions with cluster numbers resulting above in a validty index above validity.max}
   \item{col.best.match}{Color to use for plotting the line indicating
                         the position of the best match}
+  \item{rain.data}{vector with rainfall data}
+  \item{show.data}{boolean, indicating whether to show discharge data}
+  \item{show.data.measured}{boolean, indicating whether to show measured discharge data}
+  \item{show.data.model}{boolean, indicating whether to show modeled discharge data}
+  \item{show.errors}{boolean, indicating whether to show error type bars}
+  \item{grid.nx}{number of grid lines to be ploted (see \code{\link{grid}})}
   \item{...}{additional parameters passed to plot}
 }
 \details{
