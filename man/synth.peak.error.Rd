@@ -12,14 +12,13 @@ with respect to these errors.
 }
 \usage{
 synth.peak(base = 0.07, base.time = 6, rise.time = 5, rise.factor,
-recession.const = 0.2, length.out = 240, rez.time = length.out -
-ceiling(base.time) - ceiling(rise.time))
+recession.const = 0.2, length.out = 240, rez.time)
 synth.peak.error(base = 0.07, base.time = 6, rise.time = 5,
 rise.factor, rise.factor2, recession.const = 0.2, length.out = 240,
 rez.time = length.out - base.time - rise.time, err1.factor = c(1.2,
-1.4, 1.6), err2.factor = c(0.01, 0.02, 0.04), err3.factor = c(2, 4,
+1.4, 1.6), err2.factor = base/c(10, 5, 2), err3.factor = c(2, 4,
 8), err4.factor = c(9, 18, 27), err5.factor = c(0.1, 0.2, 0.4),
-err6.factor = c(1.5, 2, 3), 
+err6.factor = c(0.7, 0.8, 0.9), 
 err9.factor = c(2, 3, 4.5))
 p.synth.peak.error(peaks, y.max = (max(peaks, na.rm = TRUE)),
                  peak.cluster = NULL, peak.palette = grey(c(0, 0.6,

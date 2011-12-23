@@ -1,0 +1,2 @@
+example.peaks: example.peaks reference.peak
+tiger.example: d.dates tiger.multi tiger.single

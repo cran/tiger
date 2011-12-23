@@ -37,16 +37,16 @@ legend.pos="topleft", show.data=TRUE, show.errors=TRUE, show.data.model=show.dat
     if(show.data.model){
         if(result$multi.model){
             for(i in 1:result$count.model){
-                reduced.lines(xval[x.range], result$model[i,x.range], type="l", lwd=2, col=as.character(data.colors$modelled))
+                reduced.lines(xval[x.range], result$model[i,x.range], type="l", lwd=3, col=as.character(data.colors$modelled))
             }
         } else {
-            reduced.lines(xval[x.range], result$model[x.range], type="l", lwd=2, col=as.character(data.colors$modelled))
+            reduced.lines(xval[x.range], result$model[x.range], type="l", lwd=3, col=as.character(data.colors$modelled))
         }
         leg.col = as.character(data.colors$modelled)
         leg.text = "modelled"
     }
     if(show.data.measured){
-        reduced.lines(xval[x.range], result$measured[x.range], type="l", lwd=1.5, col=as.character(data.colors$measured))
+        reduced.lines(xval[x.range], result$measured[x.range], type="l", lwd=2.5, col=as.character(data.colors$measured))
         leg.col = c(leg.col, as.character(data.colors$measured))
         leg.text = c(leg.text, "measured")
 	if(!is.null(rain.data)){
@@ -59,7 +59,7 @@ legend.pos="topleft", show.data=TRUE, show.errors=TRUE, show.data.model=show.dat
 	}
     }
     if(show.data.model | show.data.measured){
-        legend(legend.pos, inset=0.05, lty=c(1,1), lwd=c(2,1.5),col=leg.col,  legend=leg.text)
+        legend(legend.pos, inset=0.05, lty=c(1,1), lwd=c(3,2.5),col=leg.col,  legend=leg.text)
     }
 
     if(show.errors){

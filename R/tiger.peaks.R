@@ -21,6 +21,10 @@ tiger.peaks <- function(result, synthetic.errors){
        for(level in 1:n.levels){
            if(!is.na(synthetic.errors[1,error,level,1])){
                bla <- diagnostic_dawson(modelled=synthetic.errors[1,error,level,],measured=synthetic.errors[2,error,level,], use_qualV=TRUE )
+	       #check that everything except AIC and BIC is not NA
+	       if(any(is.na(bla[,-c(7:8)]))){
+		       stop(paste("diagnostic measures return NA for error:", error, " level:", level))
+	       }
                synth_diag[error,level,] <- drop(as.matrix(bla))
            }
        }
