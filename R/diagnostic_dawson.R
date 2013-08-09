@@ -100,7 +100,7 @@ additional=TRUE, use_qualV=FALSE, diff.ecdf=NA){
       EQ <- mean(diff.ecdf(difff), na.rm=TRUE)
   }
   if(use_qualV){
-        require(qualV)
+         # require(qualV)
    lcs_slope <- function(o,p,f){
        time <- 1:length(o)
        o_fl <- f.slope(time,o,f=f)

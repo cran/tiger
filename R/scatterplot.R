@@ -1,6 +1,6 @@
 scatterplot <- function(measures, show.measures=1:num.measures){
 
-    require(hexbin)
+#    require(hexbin)
     num.measures <- NCOL(measures)
     panel.hist <- function(x, ...)
     {

@@ -1,3 +1,5 @@
+import(e1071, hexbin, qualV, klaR, som)
+importFrom(lattice, splom)
 
 export( 
    box.plots, color.factor, correlated, count.diff.direction.error,

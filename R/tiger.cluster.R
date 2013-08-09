@@ -10,7 +10,7 @@ tiger.cluster <- function(answer, som.init="sample", som.topol="hexa", maxc = 15
             stop("SOM dimensions too large for length of time series")
         }
 
-        require(som)
+#        require(som)
         cat("Calculating SOM takes a while\n")
         mysom.rer <- som(as.matrix(answer$measures.uniform[!answer$na.rows,]),
             xdim=answer$som.dim[1], ydim=answer$som.dim[2],
@@ -23,7 +23,7 @@ tiger.cluster <- function(answer, som.init="sample", som.topol="hexa", maxc = 15
 
 
     #Bestimmen der Anzahl Cluster
-    require(e1071)
+#    require(e1071)
     validity <- rep(NA, maxc)
     all.cluster <- list()
     for(centers in 2:maxc){

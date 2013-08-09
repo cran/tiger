@@ -1,5 +1,5 @@
 tiger.som.peaks <- function(result, do.single=TRUE){
-    require(som)
+#    require(som)
     cat("Calculating peak position on SOM takes a while\n")
      #Dauert mind. 5 Minuten!
     n.errors <- dim(result$synthetic.errors)[2]

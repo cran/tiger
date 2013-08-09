@@ -1,5 +1,5 @@
-97381710eb1bcb4252a8381f7ce34062 *DESCRIPTION
-babbfc6c018b6b501079bc25e47ebad6 *NAMESPACE
+72d58a8a03fa85dbdc314ee72fe716d1 *DESCRIPTION
+38b550e2d472300e704ec394221a5ea8 *NAMESPACE
 8b28d59c805a0195ab543740699c0db7 *R/add.dimension.R
 5f776b209fce99042c8851e68a8907ee *R/box.plots.R
 fe9af4a2c6e7d91936e7acfca67933a6 *R/box.plots_all_values_with_soms.R
@@ -9,7 +9,7 @@ b3733785f8e4dd812270ef7baadc77b2 *R/color.factor.R
 9ab05f3bd684e3aa3fd70791d64c6f85 *R/correl.R
 0ab8ad3185aeeb63b914613f44492d50 *R/correlated.R
 d64c15fda76f2bfb21818cd8bd251a00 *R/count.diff.direction.error.R
-53b1e994b408545667fd5ca024721894 *R/diagnostic_dawson.R
+3a7fe94fe87f576628518a997e545740 *R/diagnostic_dawson.R
 45d9cb27f85f7bc1ea3976c3f2a781b5 *R/diagnostic_series.R
 d2360db982df9400ede6c39639b8f065 *R/diagnostic_window.R
 3738c67cb55963e87aef8d72d21d62c1 *R/drop.dimension.R
@@ -27,16 +27,16 @@ f10af2477ea41ba8dfb18e46746c2a25 *R/k_hyd.R
 74b7a3efab429428b79befd4f8acaf42 *R/peaks.measures.R
 0d265c29b9370daf18b42c7d72bb4893 *R/peaks.on.som.R
 7464f41f7805dc2cedc4db63098cd062 *R/reduced.line.R
-443ff103d22e4fd4ec0120f108da0522 *R/scatterplot.R
+0def00e391ede27ed04510129d9be772 *R/scatterplot.R
 269ba0e67233120e008271d8501ab8a8 *R/som.cluster.R
-83cc28d8c6ebbc8c60ffffdb2581c74e *R/som.measure.level.R
+9284b755a7c812ebbb0b8b6b57fbde3c *R/som.measure.level.R
 c8e86ed220ac5a235167abcce95a2017 *R/som.regions.for.values.R
 52f3d69420ce8f2e49569612310f28dd *R/synth.peak.R
 300618e7e7d27a5e322df904506b2375 *R/synth.peak.error.R
 0b4867e25f77d316f544e3ec807ac6b1 *R/tiger.R
-40ba66e394dbfe63eefa15e1baf3d35a *R/tiger.cluster.R
+cd228b1c56698adbd2d7db6e14fd0964 *R/tiger.cluster.R
 3869a93b76c3ab8a6ece8aecf96aaf63 *R/tiger.peaks.R
-0b24de5a5ec8c2c0b11091c6fedb59a5 *R/tiger.som.peaks.R
+213246deb08d4e2727d0f8bedf239d6a *R/tiger.som.peaks.R
 8f100e812d0cd25246b3a950a64c45d1 *R/to.uniform.R
 e9ee30477519f055e8bbbf36f96267e1 *R/validityIndex.R
 11f6efee31005cd9c0c6864e60ee85b4 *data/datalist

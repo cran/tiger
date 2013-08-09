@@ -1,5 +1,5 @@
 som.measure.level <- function(result, show.measures = 1:num.measures, mfrow=c(4,3)){
-    require(klaR)
+#    require(klaR)
     num.measures <- c(1:NCOL(result$som$data))
     newrange<-apply(result$som$code, 2, range)
     newrange
