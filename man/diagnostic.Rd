@@ -29,9 +29,14 @@
     of the residuals.
 }
 \usage{
-diagnostic_window(position, window.size, measured, modelled, use_qualV = FALSE, diff.ecdf=NA)
-diagnostic_series(measured, modelled, window.size, step.size = 1, integral_correction = FALSE, use_qualV = FALSE)
-diagnostic_dawson(modelled, measured, p=NA, m=NA, additional=TRUE, use_qualV=FALSE, diff.ecdf=NA )
+diagnostic_window(position, window.size, measured, 
+		modelled, use_qualV = FALSE,
+		diff.ecdf=NA)
+diagnostic_series(measured, modelled, window.size, 
+		step.size = 1, integral_correction = FALSE, 
+		use_qualV = FALSE)
+diagnostic_dawson(modelled, measured, p=NA, m=NA, additional=TRUE, 
+		use_qualV=FALSE, diff.ecdf=NA )
 }
 \arguments{
   \item{modelled}{ Modelled time series or array with dimension \code{c(number_series, dim(measured))}}
@@ -75,10 +80,12 @@ Jachner, S.; van den Boogaart, K. G. & Petzoldt, T. Statistical Methods for the 
    diagnostic_dawson(measured = reference.peak, modelled = example.peaks[1,])
 
    #first half only
-   diagnostic_window(measured=reference.peak, modelled=example.peaks[1,], position = 1, window.size = 45 )
+   diagnostic_window(measured=reference.peak, modelled=example.peaks[1,],
+			 position = 1, window.size = 45 )
    
    #gliding window for 20 time steps
-   diagnostic_series(measured=reference.peak, modelled=example.peaks[1,], window.size = 20 )
+   diagnostic_series(measured=reference.peak, modelled=example.peaks[1,],
+			 window.size = 20 )
 
 }
 \keyword{ utilities }

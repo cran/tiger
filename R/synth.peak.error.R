@@ -1,8 +1,8 @@
 synth.peak.error <- function(base=0.07,base.time=6, rise.time=5,
 rise.factor, rise.factor2, recession.const=0.2, length.out=240,
 rez.time=length.out-base.time-rise.time, err1.factor=c(1.2,1.4,1.6),
-err2.factor = base/c(10,5,2), err3.factor=c(2,4,8), err4.factor =
-c(9,18,27), err5.factor = c(0.1,0.2,0.4),err6.factor =c(0.7,0.8,0.9),  err9.factor=c(2,3,4.5)){
+err2.factor = c(0.01,0.02,0.04), err3.factor=c(2,4,8), err4.factor =
+c(9,18,27), err5.factor = c(0.1,0.2,0.4),err6.factor =c(1.5,2,3),  err9.factor=c(2,3,4.5)){
 
     n.errors <- 9
     n.levels <- 6
@@ -88,24 +88,20 @@ c(9,18,27), err5.factor = c(0.1,0.2,0.4),err6.factor =c(0.7,0.8,0.9),  err9.fact
         j=j+1
     }
 
-
-    if(any((rowSums(peaks[1,5,,])-sum(ref.peak))/sum(ref.peak)*100 > 0.5)){
-	    print(paste("Volume for reference peak: ", sum(ref.peak)))
-	    print("Volumes for error peaks:")
-	    print(rowSums(peaks[1,5,,]))
-    	stop("Peak volumes are not correct for 'volume-optimized' peaks:")
-    }
+    print("Check if peak volumes are correct for 'volume-optimized'
+peaks:")
+    print(paste("Volume for reference peak: ", sum(ref.peak)))
+    print("Volumes for error peaks:")
+    print(rowSums(peaks[1,5,,]))
 
 
     #too wide/narrow
     j=1
     for(factor in err6.factor){
         time.change=round(rise.time*factor,0)
-        peaks[1,6,4-j,]<-synth.peak(base=base, base.time=base.time-time.change, rise.time=rise.time+time.change, rise.factor=rise.factor, recession.const=recession.const/factor, length.out=length.out)
+        peaks[1,6,4-j,]<-synth.peak(base=base, base.time=base.time-time.change, rise.time=rise.time+time.change, rise.factor=rise.factor, recession.const=recession.const/factor, length.out=length.out, rez.time=rez.time)
         time.change=round(rise.time/factor,0)
-	rt <- rise.time - time.change
-	if(rt < 0) rt <- 0
-        peaks[1,6,3+j,]<-synth.peak(base=base, base.time=base.time+(rise.time-rt), rise.time=rt, rise.factor=rise.factor, recession.const=recession.const*factor, length.out=length.out)
+        peaks[1,6,3+j,]<-synth.peak(base=base, base.time=base.time+time.change, rise.time=rise.time-time.change, rise.factor=rise.factor, recession.const=recession.const*factor, length.out=length.out, rez.time=rez.time)
         peaks[2,6,4-j,]<- ref.peak
         peaks[2,6,3+j,]<- ref.peak
         j=j+1
@@ -142,6 +138,5 @@ c(9,18,27), err5.factor = c(0.1,0.2,0.4),err6.factor =c(0.7,0.8,0.9),  err9.fact
         peaks[1,8,j,]<- peaks[1,9,j,]
         peaks[2,8,j,]<- ref.peak
     }
-    stopifnot(all(!is.na(peaks)))
     return(peaks)
 }

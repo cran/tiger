@@ -4,7 +4,6 @@ maxc = 15,
 synthetic.errors=NA
 )
 {
-	stopifnot(maxc>2)
     if((length(modelled) - window.size)/step.size < som.dim[1]*som.dim[2]){
         stop("SOM dimensions too large for length of time series")
     }

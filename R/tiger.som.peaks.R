@@ -15,13 +15,8 @@ tiger.som.peaks <- function(result, do.single=TRUE){
            record <- matrix(rep(synth_diag.rer[i,],NROW(result$som$code)), nrow=NROW(result$som$code), ncol=NCOL(synth_diag.rer), byrow=TRUE)
 
            dist <- eD(result$som$code, record)
-	   closest <- which.min(dist)
-	   if(length(dist[closest])==0){
-		   print("here is the troublesome entry")
-		   browser()
-	   }
-           som.pos.errors[i,1:2] <- as.numeric(result$som$code.sum[closest,1:2])
-           som.pos.errors[i,3] <- dist[closest]
+           som.pos.errors[i,1:2] <- as.numeric(result$som$code.sum[which.min(dist),1:2])
+           som.pos.errors[i,3] <- dist[which.min(dist)]
            #too slow:
            #som.pos.errors[i,]<- as.matrix(som.project(result$som, t(synth_diag.rer[i,])))
        }

@@ -6,8 +6,6 @@
 \alias{peaks.measures}
 \alias{scatterplot}
 \alias{p.validityIndex}
-\alias{som.cluster}
-\alias{som.measure.level}
 \title{ Evaluation plots for temporal dynamics of model performance }
 \description{
    Create various plot to understand the temporal dynamics of model performance 
@@ -31,9 +29,9 @@ errors.in.time(xval, result, solution, rain.data = NULL, show.months
                  show.data = TRUE, show.errors = TRUE, show.data.model
                  = show.data, show.data.measured = show.data, ...)
 peaks.in.clusters(result, solution,  new.order = 1:solution)
-peaks.on.som(result, solution, clusterPalette=rainbow(solution), cell.size = 0.9, mfrow=c(2,ceiling(n.errors/2)), new.order=1:solution)
-som.cluster(result, maxc = result$maxc, solutions = 2:maxc, new.order = NA)
-som.measure.level(result, show.measures = 1:num.measures, mfrow = c(4, 3))
+peaks.on.som(result, solution, clusterPalette=rainbow(solution), 
+		 cell.size = 0.9, mfrow=c(2,ceiling(n.errors/2)), 
+		 new.order=1:solution)
 peaks.measures(result, show.measures = 1:num.measures,
                  synthetic.peaks.col = c(2:8, 2:8), mfrow = c(2, 3),
                  col.best.match = "black", do.out = rep(TRUE,
@@ -46,7 +44,10 @@ p.validityIndex(result, validity.max)
   \item{result}{ object returned from \code{\link{tiger}}}
   \item{measures}{ data.frame from which to create a scatter plot.  e.g. result\$measures.uniform }
   \item{solution}{ number of clusters to use for further evaluations (see also \code{\link{validityIndex}})}
-  \item{show.measures}{Vector with the indices of the performance measures to plot. Use \code{result$names[show.measures]} to see the names of the measures}
+  \item{single.errors}{Boolean, indicating weather different synthetic errors should be combined into a single plot or shown in multiple plots }
+  \item{show.legend}{Boolean, indicating whether to show the legend}
+  \item{show.main}{Boolean, indicating whether to show performance measure names as plot title}
+  \item{show.measures}{ vector of indices indicating for which performance measures to show the plots}
   \item{new.order}{New numbering to assign to clusters. See also \code{\link{change.order.clusters}}}
   \item{show.synthetic.peaks}{Show values of the synthetic peaks on top of the box plots.}
   \item{synthetic.peaks.col}{Colors to use for synthetic peaks.}
@@ -80,11 +81,6 @@ the values for the performance measures are to be plotted as black lines in the 
   \item{show.data.model}{boolean, indicating whether to show modeled discharge data}
   \item{show.errors}{boolean, indicating whether to show error type bars}
   \item{grid.nx}{number of grid lines to be ploted (see \code{\link{grid}})}
-  \item{maxc}{ Highest number of clusters to be plotted }
-  \item{solutions}{ Vector of solutions to be plotted }
-  \item{single.errors}{Boolean, indicating weather different synthetic errors should be combined into a single plot or shown in multiple plots }
-  \item{show.legend}{Boolean, indicating whether to show the legend}
-  \item{show.main}{Boolean, indicating whether to show performance measure names as plot title}
   \item{...}{additional parameters passed to plot}
 }
 \details{
@@ -96,11 +92,6 @@ dimension
 
 peaks.in.clusters: table of the position of the synthetic peak
 errors in the clusters.
-
-
-som.cluster: Plot the location of the different clusters on the SOM for multiple numbers of clusters.
-
-som.measure.level: Plot the distribution of the performance measures on the SOM.
 
 peaks.measures: responce of the performance measures to the
 synthetic peak errors.
@@ -127,7 +118,8 @@ opar <- par(mfrow=c(3,5))
 box.plots(tiger.single, solution=6, new.order=new.order, show.synthetic.peaks=TRUE)
 box.plots(tiger.single, solution=6, new.order=new.order, show.cell=data.frame(x=1,y=1))
 par(opar)
-errors.in.time(xval=d.dates, result= tiger.single, solution=6, show.months=TRUE, new.order=new.order)
+errors.in.time(xval=d.dates, result= tiger.single, solution=6, 
+		show.months=TRUE, new.order=new.order)
 peaks.in.clusters(tiger.single, solution=6, new.order=new.order)
 peaks.measures(tiger.single, show.measures=correlated$measures.uniform$to.keep)
 scatterplot(tiger.single$measures.uniform, show.measures=correlated$measures.uniform$to.keep)

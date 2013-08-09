@@ -28,7 +28,7 @@ legend.pos="topleft", show.data=TRUE, show.errors=TRUE, show.data.model=show.dat
         month.ticks <-seq(my.min,my.max,by="month") 
         month.lab <- strftime(as.POSIXlt(month.ticks), "%b")
         month.lab[strftime(as.POSIXlt(month.ticks), "%m")=="01"] <- NA
-        axis(1, at=month.ticks, label=month.lab, cex.axis=0.4, tcl=-0.15, mgp=c(3,0.2,0))
+        axis(1, at=month.ticks, labels=month.lab, cex.axis=0.4, tcl=-0.15, mgp=c(3,0.2,0))
     }
 
     leg.col=c()
